@@ -1,22 +1,17 @@
-name: 'slack-pr-summary'
-description: 'Send summary of open PRs to Slack'
-author: 'tgallacher'
+name: "slack-pr-summary"
+description: "Send summary of open PRs to Slack"
+author: "tgallacher"
 
 inputs:
   github_token:
-    description: 'Github token with access to the target repo'
+    description: "Github token with access to the target repo"
     required: true
-  repoOwner:
-    description: 'Github repository owner from url. Format: github.com/<owner>/<name>'
+  repo:
+    description: "Github repository url, format: github.com/<owner>/<name>"
     required: true
-  repoName:
-    description: 'Github repository name from url. Format: github.com/<owner>/<name>'
+  msg_header:
+    description: "Provide text to show at the top of the summary"
     required: true
-
-outputs:
-  prs:
-    # This will be a JSON.stringified array
-    description: 'List of PRItem objects found for the given repo'
 
 runs:
   using: node20
