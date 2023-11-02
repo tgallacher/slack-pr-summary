@@ -1,16 +1,16 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
+  "name": "slack-pr-summary",
+  "description": "Send summary of PRs to Slack",
   "version": "0.0.0",
-  "author": "",
+  "author": "tgallacher",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/tgallacher/slack-pr-summary",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/tgallacher/slack-pr-summary"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/tgallacher/slack-pr-summary/issues"
   },
   "keywords": [
     "actions",
