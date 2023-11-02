@@ -1,18 +1,22 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'slack-pr-summary'
+description: 'Send summary of open PRs to Slack'
+author: 'tgallacher'
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  github_token:
+    description: 'Github token with access to the target repo'
     required: true
-    default: '1000'
+  repoOwner:
+    description: 'Github repository owner from url. Format: github.com/<owner>/<name>'
+    required: true
+  repoName:
+    description: 'Github repository name from url. Format: github.com/<owner>/<name>'
+    required: true
 
-# Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  prs:
+    # This will be a JSON.stringified array
+    description: 'List of PRItem objects found for the given repo'
 
 runs:
   using: node20
