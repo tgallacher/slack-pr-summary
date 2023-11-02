@@ -12,6 +12,9 @@ inputs:
   msg_header:
     description: "Provide text to show at the top of the summary"
     required: true
+  slack_webhook_url:
+    description: "Your configured Slack Incoming webhook"
+    required: true
 
 runs:
   using: node20
