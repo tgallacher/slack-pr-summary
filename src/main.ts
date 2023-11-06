@@ -2,6 +2,8 @@ import * as core from "@actions/core";
 import * as github from "@actions/github";
 import axios, { AxiosError } from "axios";
 
+import { getRepoFragmentsFromUrl } from "./utils";
+
 interface PRItem {
   /* PR title  */
   title: string;
@@ -14,19 +16,17 @@ interface PRItem {
 export async function run(): Promise<void> {
   try {
     const token: string = core.getInput("github_token");
-    const rawRepo: string = core.getInput("repo");
+    const repoUrl: string = core.getInput("repo");
     const slackMsgHeader: string = core.getInput("msg_header");
     const slackWebhookUrl: string = core.getInput("slack_webhook_url");
 
     core.debug("Getting authenticated Octo client");
     const octokit = github.getOctokit(token);
 
-    const repo = rawRepo.replace(/https?:\/\//, "").replace("github.com/", "");
-    const [repoOwner, repoName] = repo.match(/(.+?)\/(.+)/) || [];
-
+    const { repoOwner, repoName } = getRepoFragmentsFromUrl(repoUrl);
     if (!repoOwner || !repoName) {
       return core.setFailed(
-        `Failed to parse repo owner and/or name from url, "${rawRepo}"`,
+        `Failed to parse repo owner and/or name from url, "${repoUrl}"`,
       );
     }
 
@@ -68,7 +68,7 @@ export async function run(): Promise<void> {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: slackMsgHeader,
+            text: slackMsgHeader || "Open PRs:",
           },
         },
         { type: "divider" },
@@ -87,7 +87,7 @@ export async function run(): Promise<void> {
   } catch (error) {
     if (error instanceof AxiosError) {
       core.error(
-        `Failed to pose data to Slack webhook: "HTTP${error.response?.status} ${error.response?.statusText}"`,
+        `Failed to post data to Slack webhook: "HTTP${error.response?.status} ${error.response?.statusText}"`,
       );
       return core.setFailed(error.response?.data);
     }
