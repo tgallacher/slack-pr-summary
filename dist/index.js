@@ -33435,8 +33435,11 @@ exports.run = run;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getRepoFragmentsFromUrl = void 0;
 function getRepoFragmentsFromUrl(url) {
-    const repo = url.replace(/https?:\/\//, "");
-    const [, repoOwner = null, repoName = null] = repo.match(/github\.com\/(.+?)\/([^/]+)/) || [];
+    let repoOwner = null;
+    let repoName = null;
+    if (!url || (url.includes("://") && !url.includes("github.com")))
+        return { repoOwner, repoName };
+    [, repoOwner, repoName] = /(\w+?)\/([^/]+)\/?$/.exec(url) || [];
     return { repoOwner, repoName };
 }
 exports.getRepoFragmentsFromUrl = getRepoFragmentsFromUrl;

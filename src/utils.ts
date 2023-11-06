@@ -2,9 +2,12 @@ export function getRepoFragmentsFromUrl(url: string): {
   repoName: null | string;
   repoOwner: null | string;
 } {
-  const repo = url.replace(/https?:\/\//, "");
-  const [, repoOwner = null, repoName = null] =
-    repo.match(/github\.com\/(.+?)\/([^/]+)/) || [];
+  let repoOwner = null;
+  let repoName = null;
 
+  if (!url || (url.includes("://") && !url.includes("github.com")))
+    return { repoOwner, repoName };
+
+  [, repoOwner, repoName] = /(\w+?)\/([^/]+)\/?$/.exec(url) || [];
   return { repoOwner, repoName };
 }
