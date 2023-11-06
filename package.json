@@ -67,7 +67,9 @@
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "bottleneck": "^2.19.5",
+    "date-fns": "^2.30.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.7",
