@@ -33351,18 +33351,18 @@ exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const axios_1 = __importStar(__nccwpck_require__(8757));
+const utils_1 = __nccwpck_require__(1314);
 async function run() {
     try {
         const token = core.getInput("github_token");
-        const rawRepo = core.getInput("repo");
+        const repoUrl = core.getInput("repo");
         const slackMsgHeader = core.getInput("msg_header");
         const slackWebhookUrl = core.getInput("slack_webhook_url");
         core.debug("Getting authenticated Octo client");
         const octokit = github.getOctokit(token);
-        const repo = rawRepo.replace(/https?:\/\//, "").replace("github.com/", "");
-        const [repoOwner, repoName] = repo.match(/(.+?)\/(.+)/) || [];
+        const { repoOwner, repoName } = (0, utils_1.getRepoFragmentsFromUrl)(repoUrl);
         if (!repoOwner || !repoName) {
-            return core.setFailed(`Failed to parse repo owner and/or name from url, "${rawRepo}"`);
+            return core.setFailed(`Failed to parse repo owner and/or name from url, "${repoUrl}"`);
         }
         core.debug(`Fetching open PRs for repo: "${repoOwner}/${repoName}"`);
         const openPRsResponse = await octokit.rest.pulls.list({
@@ -33396,7 +33396,7 @@ async function run() {
                     type: "section",
                     text: {
                         type: "mrkdwn",
-                        text: slackMsgHeader,
+                        text: slackMsgHeader || "Open PRs:",
                     },
                 },
                 { type: "divider" },
@@ -33414,7 +33414,7 @@ async function run() {
     }
     catch (error) {
         if (error instanceof axios_1.AxiosError) {
-            core.error(`Failed to pose data to Slack webhook: "HTTP${error.response?.status} ${error.response?.statusText}"`);
+            core.error(`Failed to post data to Slack webhook: "HTTP${error.response?.status} ${error.response?.statusText}"`);
             return core.setFailed(error.response?.data);
         }
         // Fail the workflow run if an error occurs
@@ -33423,6 +33423,23 @@ async function run() {
     }
 }
 exports.run = run;
+
+
+/***/ }),
+
+/***/ 1314:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getRepoFragmentsFromUrl = void 0;
+function getRepoFragmentsFromUrl(url) {
+    const repo = url.replace(/https?:\/\//, "");
+    const [, repoOwner = null, repoName = null] = repo.match(/github\.com\/(.+?)\/([^/]+)/) || [];
+    return { repoOwner, repoName };
+}
+exports.getRepoFragmentsFromUrl = getRepoFragmentsFromUrl;
 
 
 /***/ }),
