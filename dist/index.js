@@ -57666,11 +57666,11 @@ async function run() {
             return core.setFailed(`Failed to parse repo owner and/or name from url, "${repoUrl}"`);
         }
         const prs = await getGithubPRSummary(token, repoOwner, repoName);
-        const authorTxt = (pr) => (pr?.author ? pr.author : "");
-        const commentsTxt = (pr) => pr.numComments ? `${pr.numComments} comments` : "";
+        const authorTxt = (pr) => pr?.author ? `, ${pr.author}` : "";
+        const commentsTxt = (pr) => pr.numComments != null ? `, ${pr.numComments} comments` : "";
         const openedTxt = (pr) => pr.opened ? `${(0, date_fns_1.intlFormatDistance)(new Date(pr.opened), new Date())}` : "";
         const text = prs
-            .map(p => `- <${p.url}|${p.title}>\t_${openedTxt(p)}, ${commentsTxt(p)}, ${authorTxt(p)}_`)
+            .map(p => `- <${p.url}|${p.title}>\t_${openedTxt(p)}${commentsTxt(p)}${authorTxt(p)}_`)
             .join("\n");
         core.debug("Formatted Slack PR list:");
         core.debug(text);

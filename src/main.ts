@@ -104,18 +104,19 @@ export async function run(): Promise<void> {
 
     const prs = await getGithubPRSummary(token, repoOwner, repoName);
 
-    const authorTxt = (pr?: PRItem): string => (pr?.author ? pr.author : "");
+    const authorTxt = (pr?: PRItem): string =>
+      pr?.author ? `, ${pr.author}` : "";
     const commentsTxt = (pr: PRItem): string =>
-      pr.numComments ? `${pr.numComments} comments` : "";
+      pr.numComments != null ? `, ${pr.numComments} comments` : "";
     const openedTxt = (pr: PRItem): string =>
       pr.opened ? `${intlFormatDistance(new Date(pr.opened), new Date())}` : "";
 
     const text = prs
       .map(
         p =>
-          `- <${p.url}|${p.title}>\t_${openedTxt(p)}, ${commentsTxt(
+          `- <${p.url}|${p.title}>\t_${openedTxt(p)}${commentsTxt(
             p,
-          )}, ${authorTxt(p)}_`,
+          )}${authorTxt(p)}_`,
       )
       .join("\n");
 
