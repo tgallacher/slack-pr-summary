@@ -50,7 +50,7 @@ export async function run(): Promise<void> {
       .filter(p => p.draft !== true)
       .map(p => ({
         title: p.title,
-        url: p.url,
+        url: p.html_url,
         author: p.user?.login,
       }));
 

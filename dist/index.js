@@ -33381,7 +33381,7 @@ async function run() {
             .filter(p => p.draft !== true)
             .map(p => ({
             title: p.title,
-            url: p.url,
+            url: p.html_url,
             author: p.user?.login,
         }));
         const text = prs
