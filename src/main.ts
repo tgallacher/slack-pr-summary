@@ -55,7 +55,7 @@ export async function run(): Promise<void> {
       }));
 
     const text = prs
-      .map(p => `- <${p.url}|${p.title}>${p.author ? "\t_(p.author)_" : ""}`)
+      .map(p => `- <${p.url}|${p.title}>${p.author ? `\t_(${p.author})_` : ""}`)
       .join("\n");
 
     core.debug("Formatted Slack PR list:");
